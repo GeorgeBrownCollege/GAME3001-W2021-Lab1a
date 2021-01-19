@@ -148,6 +148,11 @@ void TextureManager::draw(const std::string& id, const int x, const int y, const
 	SDL_RenderCopyEx(Renderer::Instance()->getRenderer(), m_textureMap[id].get(), &srcRect, &destRect, angle, nullptr, flip);
 }
 
+void TextureManager::draw(const std::string& id, const glm::vec2 position, const double angle, const int alpha, const bool centered, const SDL_RendererFlip flip)
+{
+	draw(id, position.x, position.y, angle, alpha, centered, flip);
+}
+
 void TextureManager::drawFrame(const std::string& id, const int x, const int y, const int frame_width, 
 							   const int frame_height, int &current_row,
                                int &current_frame, int frame_number, int row_number, 

@@ -8,6 +8,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "ship.h"
+#include "SpaceShip.h"
 
 class PlayScene : public Scene
 {
@@ -33,6 +34,8 @@ private:
 	bool m_playerFacingRight;
 
 	Ship* m_pShip;
+
+	SpaceShip* m_pSpaceShip;
 
 	// UI Items
 	Button* m_pBackButton;

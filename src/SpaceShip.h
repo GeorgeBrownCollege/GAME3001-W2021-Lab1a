@@ -18,9 +18,14 @@ public:
 	void draw() override;
 	void update() override;
 	void clean() override;
+
+	// getters and setters
+	void setDestination(glm::vec2 destination);
 	
 private:
-	
+	glm::vec2 m_destination;
+
+	glm::vec2 m_direction;
 };
 
 

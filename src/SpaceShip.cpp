@@ -1,5 +1,7 @@
 #include "SpaceShip.h"
 
+#include "Util.h"
+
 SpaceShip::SpaceShip()
 {
 	TextureManager::Instance()->load("../Assets/textures/spaceship.png", "spaceship");
@@ -36,8 +38,20 @@ void SpaceShip::draw()
 
 void SpaceShip::update()
 {
+	// magnitude of the direction
+	m_direction = m_destination - getTransform()->position;
+	m_direction = Util::normalize(m_direction);
+
+	getRigidBody()->velocity = m_direction * 30.0f;
+	
+	getTransform()->position += getRigidBody()->velocity;
 }
 
 void SpaceShip::clean()
 {
+}
+
+void SpaceShip::setDestination(const glm::vec2 destination)
+{
+	m_destination = destination;
 }

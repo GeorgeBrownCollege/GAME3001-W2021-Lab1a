@@ -31,7 +31,7 @@ private:
 	Target* m_pTarget;
 
 	// UI Items
-	Button* m_pStartButton;
+
 };
 
 #endif /* defined (__PLAY_SCENE__) */

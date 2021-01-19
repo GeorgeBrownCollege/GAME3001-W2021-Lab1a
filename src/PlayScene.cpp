@@ -67,29 +67,12 @@ void PlayScene::start()
 	
 	m_pSpaceShip = new SpaceShip();
 	m_pSpaceShip->getTransform()->position = glm::vec2(100.0f, 100.0f);
+
+	m_pSpaceShip->setEnabled(false);
+
+	m_pSpaceShip->setDestination(m_pTarget->getTransform()->position);
+	
 	addChild(m_pSpaceShip);
-
-	m_pStartButton = new Button();
-	m_pStartButton->getTransform()->position = glm::vec2(400.0f, 500.0f);
-	addChild(m_pStartButton);
-
-	// event handler for mouse over event
-	m_pStartButton->addEventListener(MOUSE_OVER, [&]()-> void
-	{
-		m_pStartButton->setAlpha(128);
-	});
-
-	// event handler for mouse out event
-	m_pStartButton->addEventListener(MOUSE_OUT, [&]()-> void
-	{
-		m_pStartButton->setAlpha(255);
-	});
-
-	// event handler for mouse click event
-	m_pStartButton->addEventListener(CLICK, [&]()-> void
-	{
-		std::cout << "Start Button Clicked!!!" << std::endl;
-	});
 }
 
 void PlayScene::GUI_Function() const
@@ -102,24 +85,28 @@ void PlayScene::GUI_Function() const
 	
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
-	if(ImGui::Button("My Button"))
+
+	if(ImGui::Button("Start"))
 	{
-		std::cout << "My Button Pressed" << std::endl;
+		m_pSpaceShip->setEnabled(true);
+	}
+
+	ImGui::SameLine();
+	
+	if(ImGui::Button("Reset"))
+	{
+		m_pSpaceShip->getTransform()->position = glm::vec2(100.0f, 100.f);
+		m_pSpaceShip->setEnabled(false);
 	}
 
 	ImGui::Separator();
 
-	static float float3[3] = { 0.0f, 1.0f, 1.5f };
-	if(ImGui::SliderFloat2("My Slider", float3, 0.0f, 2.0f))
+	static float float2[2] = { m_pTarget->getTransform()->position.x, m_pTarget->getTransform()->position.y };
+	if(ImGui::SliderFloat2("My Slider", float2, 0.0f, 800.0f))
 	{
-		std::cout << float3[0] << std::endl;
-		std::cout << float3[1] << std::endl;
-		std::cout << float3[2] << std::endl;
-		std::cout << "---------------------------\n";
+		m_pTarget->getTransform()->position = glm::vec2(float2[0], float2[1]);
+		m_pSpaceShip->setDestination(m_pTarget->getTransform()->position);
 	}
-
-	static bool gravityStatus;
-	ImGui::Checkbox("Gravity", &gravityStatus); ImGui::SameLine(150);
 	
 	ImGui::End();
 

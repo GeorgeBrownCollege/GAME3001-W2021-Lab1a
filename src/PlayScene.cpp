@@ -40,72 +40,6 @@ void PlayScene::handleEvents()
 {
 	EventManager::Instance().update();
 
-	// handle player movement with GameController
-	if (SDL_NumJoysticks() > 0)
-	{
-		if (EventManager::Instance().getGameController(0) != nullptr)
-		{
-			const auto deadZone = 10000;
-			if (EventManager::Instance().getGameController(0)->LEFT_STICK_X > deadZone)
-			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
-				m_playerFacingRight = true;
-			}
-			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_X < -deadZone)
-			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
-				m_playerFacingRight = false;
-			}
-			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y > deadZone)
-			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_UP);
-			}
-			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y < -deadZone)
-			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_DOWN);
-			}
-			else
-			{
-				if (m_playerFacingRight)
-				{
-					m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
-				}
-				else
-				{
-					m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
-				}
-			}
-		}
-	}
-
-
-	// handle player movement if no Game Controllers found
-	if (SDL_NumJoysticks() < 1)
-	{
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
-		{
-			m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
-			m_playerFacingRight = false;
-		}
-		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
-		{
-			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
-			m_playerFacingRight = true;
-		}
-		else
-		{
-			if (m_playerFacingRight)
-			{
-				m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
-			}
-			else
-			{
-				m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
-			}
-		}
-	}
-	
-
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
 		TheGame::Instance()->quit();
@@ -126,11 +60,36 @@ void PlayScene::start()
 {
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
+
+	m_pTarget = new Target();
+	m_pTarget->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pTarget);
 	
 	m_pSpaceShip = new SpaceShip();
 	m_pSpaceShip->getTransform()->position = glm::vec2(100.0f, 100.0f);
-
 	addChild(m_pSpaceShip);
+
+	m_pStartButton = new Button();
+	m_pStartButton->getTransform()->position = glm::vec2(400.0f, 500.0f);
+	addChild(m_pStartButton);
+
+	// event handler for mouse over event
+	m_pStartButton->addEventListener(MOUSE_OVER, [&]()-> void
+	{
+		m_pStartButton->setAlpha(128);
+	});
+
+	// event handler for mouse out event
+	m_pStartButton->addEventListener(MOUSE_OUT, [&]()-> void
+	{
+		m_pStartButton->setAlpha(255);
+	});
+
+	// event handler for mouse click event
+	m_pStartButton->addEventListener(CLICK, [&]()-> void
+	{
+		std::cout << "Start Button Clicked!!!" << std::endl;
+	});
 }
 
 void PlayScene::GUI_Function() const
